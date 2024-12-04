@@ -1,0 +1,621 @@
+/* // import React, { useState, useEffect } from 'react';
+// import { initiatePayment } from '../api.js'; // API call
+// import Logout from './Logout.jsx';
+
+// const metroData = [
+//     {
+//         line: "Line 1",
+//         stations: [
+//             { name: "Versova", distanceFromStart: 0 },
+//             { name: "D N Nagar", distanceFromStart: 1.5 },
+//             { name: "Azad Nagar", distanceFromStart: 3.0 },
+//             { name: "Andheri", distanceFromStart: 5.0 },
+//             { name: "Ghatkopar", distanceFromStart: 11.4 },
+//         ],
+//     },
+//     {
+//         line: "Line 2A",
+//         stations: [
+//             { name: "Dahisar East", distanceFromStart: 0 },
+//             { name: "Anand Nagar", distanceFromStart: 2.0 },
+//             { name: "Borivali West", distanceFromStart: 5.0 },
+//         ],
+//     },
+// ];
+
+// const Dashboard = () => {
+//     const [selectedLine, setSelectedLine] = useState('');
+//     const [source, setSource] = useState('');
+//     const [destination, setDestination] = useState('');
+//     const [price, setPrice] = useState(0);
+//     const [stations, setStations] = useState([]);
+//     const [error, setError] = useState('');
+//     const [success, setSuccess] = useState('');
+//     const token = localStorage.getItem('token');
+
+//     useEffect(() => {
+//         if (!token) {
+//             window.location.href = '/login';
+//         }
+//         if (selectedLine) {
+//             const lineData = metroData.find(line => line.line === selectedLine);
+//             setStations(lineData ? lineData.stations : []);
+//         } else {
+//             setStations([]);
+//         }
+//     }, [selectedLine]);
+
+//     const calculatePrice = () => {
+//         const sourceStation = stations.find(station => station.name === source);
+//         const destinationStation = stations.find(station => station.name === destination);
+
+//         if (sourceStation && destinationStation) {
+//             const distance = Math.abs(destinationStation.distanceFromStart - sourceStation.distanceFromStart);
+//             setPrice(distance * 10); // ₹10 per km
+//             setError('');
+//         } else {
+//             setPrice(0);
+//             setError('Please select valid source and destination stations.');
+//         }
+//     };
+
+//     const handlePayment = async () => {
+//         if (!source || !destination || price === 0) {
+//             setError('Complete all fields and calculate the price before proceeding.');
+//             return;
+//         }
+//         try {
+//             const paymentData = { source, destination, price };
+//             const response = await initiatePayment(paymentData);
+//             setSuccess(`Payment successful! Ticket Token: ${response.data.ticket.token}`);
+//             setError('');
+//         } catch (err) {
+//             setError('An error occurred during payment. Please try again.');
+//             console.error(err);
+//         }
+//     };
+
+//     return (
+//         <>
+//         <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+//             <h1 className="text-2xl font-bold mb-6 text-center">Metro Ticket Booking</h1>
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Line:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={selectedLine}
+//                     onChange={(e) => setSelectedLine(e.target.value)}
+//                 >
+//                     <option value="">Select Line</option>
+//                     {metroData.map((line) => (
+//                         <option key={line.line} value={line.line}>
+//                             {line.line}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Source:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={source}
+//                     onChange={(e) => setSource(e.target.value)}
+//                     disabled={!stations.length}
+//                 >
+//                     <option value="">Select Source</option>
+//                     {stations.map((station) => (
+//                         <option key={station.name} value={station.name}>
+//                             {station.name}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Destination:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={destination}
+//                     onChange={(e) => setDestination(e.target.value)}
+//                     disabled={!stations.length}
+//                 >
+//                     <option value="">Select Destination</option>
+//                     {stations.map((station) => (
+//                         <option key={station.name} value={station.name}>
+//                             {station.name}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <button
+//                 className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
+//                 onClick={calculatePrice}
+//             >
+//                 Calculate Price
+//             </button>
+
+//             {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
+
+//             <button
+//                 className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+//                 onClick={handlePayment}
+//             >
+//                 Proceed to Payment
+//             </button>
+
+//             {error && <p className="mt-4 text-red-500">{error}</p>}
+//             {success && <p className="mt-4 text-green-500">{success}</p>}
+
+//         </div>
+//             <div className="mt-6 flex justify-center">
+//                 <Logout />
+//             </div>
+//         </>
+//     );
+// };
+
+// export default Dashboard; */ 
+/* very first code up one */
+
+/* second code down */
+/* // import React, { useState, useEffect } from 'react';
+// import { initiatePayment } from '../api.js'; // API call
+// import Logout from './Logout.jsx';
+
+// const metroData = [
+//     {
+//         line: "Line 1",
+//         stations: [
+//             { name: "Versova", distanceFromStart: 0 },
+//             { name: "D N Nagar", distanceFromStart: 1.5 },
+//             { name: "Azad Nagar", distanceFromStart: 3.0 },
+//             { name: "Andheri", distanceFromStart: 5.0 },
+//             { name: "Ghatkopar", distanceFromStart: 11.4 },
+//         ],
+//     },
+//     {
+//         line: "Line 2A",
+//         stations: [
+//             { name: "Dahisar East", distanceFromStart: 0 },
+//             { name: "Anand Nagar", distanceFromStart: 2.0 },
+//             { name: "Borivali West", distanceFromStart: 5.0 },
+//         ],
+//     },
+// ];
+
+// const Dashboard = () => {
+//     const [selectedLine, setSelectedLine] = useState('');
+//     const [source, setSource] = useState('');
+//     const [destination, setDestination] = useState('');
+//     const [price, setPrice] = useState(0);
+//     const [stations, setStations] = useState([]);
+//     const [error, setError] = useState('');
+//     const [success, setSuccess] = useState('');
+//     const [ticketDetails, setTicketDetails] = useState(null); // Store ticket details for modal
+//     const [isModalOpen, setIsModalOpen] = useState(false); // Track modal visibility
+//     const token = localStorage.getItem('token');
+
+//     useEffect(() => {
+//         if (!token) {
+//             window.location.href = '/login';
+//         }
+//         if (selectedLine) {
+//             const lineData = metroData.find(line => line.line === selectedLine);
+//             setStations(lineData ? lineData.stations : []);
+//         } else {
+//             setStations([]);
+//         }
+//     }, [selectedLine]);
+
+//     const calculatePrice = () => {
+//         const sourceStation = stations.find(station => station.name === source);
+//         const destinationStation = stations.find(station => station.name === destination);
+
+//         if (sourceStation && destinationStation) {
+//             const distance = Math.abs(destinationStation.distanceFromStart - sourceStation.distanceFromStart);
+//             setPrice(distance * 10); // ₹10 per km
+//             setError('');
+//         } else {
+//             setPrice(0);
+//             setError('Please select valid source and destination stations.');
+//         }
+//     };
+
+//     const handlePayment = async () => {
+//         if (!source || !destination || price === 0) {
+//             setError('Complete all fields and calculate the price before proceeding.');
+//             return;
+//         }
+//         try {
+//             const paymentData = { source, destination, price };
+//             const response = await initiatePayment(paymentData);
+//             const ticket = response.data.ticket;
+//             setTicketDetails(ticket); // Set the ticket details to show in the modal
+//             setIsModalOpen(true); // Open the modal
+//             setError('');
+//             setSuccess(`Payment successful! Ticket Token: ${ticket.token}`);
+//         } catch (err) {
+//             setError('An error occurred during payment. Please try again.');
+//             console.error(err);
+//         }
+//     };
+
+//     const handleDownloadTicket = () => {
+//         const ticketData = ticketDetails ? JSON.stringify(ticketDetails) : '';
+//         const blob = new Blob([ticketData], { type: 'application/json' });
+//         const link = document.createElement('a');
+//         link.href = URL.createObjectURL(blob);
+//         link.download = `ticket-${ticketDetails.token}.json`;
+//         link.click();
+//     };
+
+//     return (
+//         <>
+//             <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+//                 <h1 className="text-2xl font-bold mb-6 text-center">Metro Ticket Booking</h1>
+
+//                 <div className="mb-4">
+//                     <label className="block text-gray-700 mb-2">Select Line:</label>
+//                     <select
+//                         className="w-full border border-gray-300 rounded px-3 py-2"
+//                         value={selectedLine}
+//                         onChange={(e) => setSelectedLine(e.target.value)}
+//                     >
+//                         <option value="">Select Line</option>
+//                         {metroData.map((line) => (
+//                             <option key={line.line} value={line.line}>
+//                                 {line.line}
+//                             </option>
+//                         ))}
+//                     </select>
+//                 </div>
+
+//                 <div className="mb-4">
+//                     <label className="block text-gray-700 mb-2">Select Source:</label>
+//                     <select
+//                         className="w-full border border-gray-300 rounded px-3 py-2"
+//                         value={source}
+//                         onChange={(e) => setSource(e.target.value)}
+//                         disabled={!stations.length}
+//                     >
+//                         <option value="">Select Source</option>
+//                         {stations.map((station) => (
+//                             <option key={station.name} value={station.name}>
+//                                 {station.name}
+//                             </option>
+//                         ))}
+//                     </select>
+//                 </div>
+
+//                 <div className="mb-4">
+//                     <label className="block text-gray-700 mb-2">Select Destination:</label>
+//                     <select
+//                         className="w-full border border-gray-300 rounded px-3 py-2"
+//                         value={destination}
+//                         onChange={(e) => setDestination(e.target.value)}
+//                         disabled={!stations.length}
+//                     >
+//                         <option value="">Select Destination</option>
+//                         {stations.map((station) => (
+//                             <option key={station.name} value={station.name}>
+//                                 {station.name}
+//                             </option>
+//                         ))}
+//                     </select>
+//                 </div>
+
+//                 <button
+//                     className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
+//                     onClick={calculatePrice}
+//                 >
+//                     Calculate Price
+//                 </button>
+
+//                 {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
+
+//                 <button
+//                     className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+//                     onClick={handlePayment}
+//                 >
+//                     Proceed to Payment
+//                 </button>
+
+//                 {error && <p className="mt-4 text-red-500">{error}</p>}
+//                 {success && <p className="mt-4 text-green-500">{success}</p>}
+//             </div> */
+
+
+/* //             {isModalOpen && ticketDetails && (
+//                 <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+//                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+//                         <h2 className="text-2xl font-bold mb-4">Ticket Details</h2>
+//                         <p><strong>Source:</strong> {ticketDetails.source}</p>
+//                         <p><strong>Destination:</strong> {ticketDetails.destination}</p>
+//                         <p><strong>Price:</strong> ₹{ticketDetails.price}</p>
+//                         <p><strong>Time:</strong> {new Date(ticketDetails.issuedAt).toLocaleString()}</p>
+//                         <p><strong>User ID:</strong> {ticketDetails.userId}</p>
+//                         <p><strong>Ticket ID:</strong> {ticketDetails.token}</p>
+//                         <button
+//                             onClick={handleDownloadTicket}
+//                             className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
+//                         >
+//                             Download Ticket
+//                         </button>
+//                         <button
+//                             onClick={() => setIsModalOpen(false)}
+//                             className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300"
+//                         >
+//                             Close
+//                         </button>
+//                     </div>
+//                 </div>
+//             )}
+
+//             <div className="mt-6 flex justify-center">
+//                 <Logout />
+//             </div>
+//         </>
+//     );
+// };
+
+// export default Dashboard; */
+
+
+/* code 3 down */
+/* // import React, { useState, useEffect } from 'react';
+// import { initiatePayment, verifyTicketToken } from '../api'; // Import necessary API functions
+
+// const Dashboard = () => {
+//     const [selectedLine, setSelectedLine] = useState('');
+//     const [source, setSource] = useState('');
+//     const [destination, setDestination] = useState('');
+//     const [price, setPrice] = useState(0);
+//     const [stations, setStations] = useState([]);
+//     const [ticketToken, setTicketToken] = useState('');
+//     const [ticket, setTicket] = useState(null);
+//     const [error, setError] = useState('');
+//     const [success, setSuccess] = useState('');
+//     const [showModal, setShowModal] = useState(false);  // Manage modal visibility
+//     const [generatedTicket, setGeneratedTicket] = useState(null); // Store generated ticket details
+//     const token = localStorage.getItem('token');
+
+//     const metroData = [
+//         {
+//             line: "Line 1",
+//             stations: [
+//                 { name: "Versova", distanceFromStart: 0 },
+//                 { name: "D N Nagar", distanceFromStart: 1.5 },
+//                 { name: "Azad Nagar", distanceFromStart: 3.0 },
+//                 { name: "Andheri", distanceFromStart: 5.0 },
+//                 { name: "Ghatkopar", distanceFromStart: 11.4 },
+//             ],
+//         },
+//         {
+//             line: "Line 2A",
+//             stations: [
+//                 { name: "Dahisar East", distanceFromStart: 0 },
+//                 { name: "Anand Nagar", distanceFromStart: 2.0 },
+//                 { name: "Borivali West", distanceFromStart: 5.0 },
+//             ],
+//         },
+//     ];
+
+//     // Ensure the user is logged in
+//     if (!token) {
+//         window.location.href = '/login';
+//     }
+
+//     // Update the stations based on the selected line
+//     useEffect(() => {
+//         const selectedMetro = metroData.find((line) => line.line === selectedLine);
+//         if (selectedMetro) {
+//             setStations(selectedMetro.stations);
+//             setSource('');
+//             setDestination('');
+//         } else {
+//             setStations([]);
+//             setSource('');
+//             setDestination('');
+//         }
+//     }, [selectedLine]);
+
+//     const calculatePrice = () => {
+//         const sourceStation = stations.find(station => station.name === source);
+//         const destinationStation = stations.find(station => station.name === destination);
+
+//         if (sourceStation && destinationStation) {
+//             const distance = Math.abs(destinationStation.distanceFromStart - sourceStation.distanceFromStart);
+//             setPrice(distance * 10); // ₹10 per km
+//             setError('');
+//         } else {
+//             setPrice(0);
+//             setError('Please select valid source and destination stations.');
+//         }
+//     };
+
+//     const handlePayment = async () => {
+//         if (!source || !destination || price === 0) {
+//             setError('Complete all fields and calculate the price before proceeding.');
+//             return;
+//         }
+//         try {
+//             const paymentData = { source, destination, price };
+//             const response = await initiatePayment(paymentData);
+
+//             // Generate the ticket object after successful payment
+//             const ticketData = {
+//                 userId: token, // Assuming token is the user ID
+//                 source,
+//                 destination,
+//                 ticketId: response.data.ticket.token,
+//                 issuedAt: new Date(),
+//                 price,
+//                 status: 'Paid',
+//             };
+//             setGeneratedTicket(ticketData); // Store generated ticket data
+//             setSuccess('Payment successful! Ticket generated.');
+//             setShowModal(true); // Show the modal
+//             setError('');
+//         } catch (err) {
+//             setError('An error occurred during payment. Please try again.');
+//             console.error(err);
+//         }
+//     };
+
+//     const handleVerifyTicket = async () => {
+//         if (!ticketToken) {
+//             setError('Please enter a valid ticket token.');
+//             return;
+//         }
+
+//         try {
+//             const response = await verifyTicketToken(ticketToken);
+//             if (response.data.success) {
+//                 setTicket(response.data.ticket);
+//                 setError('');
+//                 setSuccess('Ticket verified successfully.');
+//             } else {
+//                 setError('Ticket not found.');
+//                 setTicket(null);
+//             }
+//         } catch (err) {
+//             setError('An error occurred while verifying the ticket.');
+//             console.error(err);
+//         }
+//     };
+
+//     const handleDownload = () => {
+//         // Convert the generated ticket to a JSON blob and download it
+//         const blob = new Blob([JSON.stringify(generatedTicket, null, 2)], { type: 'application/json' });
+//         const link = document.createElement('a');
+//         link.href = URL.createObjectURL(blob);
+//         link.download = `ticket_${generatedTicket.ticketId}.json`;
+//         link.click();
+//     };
+
+//     return (
+//         <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+//             <h1 className="text-2xl font-bold mb-6 text-center">Metro Ticket Booking</h1>
+
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Line:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={selectedLine}
+//                     onChange={(e) => setSelectedLine(e.target.value)}
+//                 >
+//                     <option value="">Select Line</option>
+//                     {metroData.map((line) => (
+//                         <option key={line.line} value={line.line}>
+//                             {line.line}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Source:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={source}
+//                     onChange={(e) => setSource(e.target.value)}
+//                     disabled={stations.length === 0}
+//                 >
+//                     <option value="">Select Source</option>
+//                     {stations.map((station) => (
+//                         <option key={station.name} value={station.name}>
+//                             {station.name}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+//             <div className="mb-4">
+//                 <label className="block text-gray-700 mb-2">Select Destination:</label>
+//                 <select
+//                     className="w-full border border-gray-300 rounded px-3 py-2"
+//                     value={destination}
+//                     onChange={(e) => setDestination(e.target.value)}
+//                     disabled={stations.length === 0}
+//                 >
+//                     <option value="">Select Destination</option>
+//                     {stations.map((station) => (
+//                         <option key={station.name} value={station.name}>
+//                             {station.name}
+//                         </option>
+//                     ))}
+//                 </select>
+//             </div>
+
+
+//             <button
+//                 className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
+//                 onClick={calculatePrice}
+//             >
+//                 Calculate Price
+//             </button>
+
+
+//             {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
+
+
+//             <button
+//                 className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+//                 onClick={handlePayment}
+//             >
+//                 Proceed to Payment
+//             </button>
+
+
+//             <div className="mt-6">
+//                 <h2 className="text-xl font-semibold mb-4">Verify Ticket</h2>
+//                 <input
+//                     type="text"
+//                     className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
+//                     placeholder="Enter Ticket Token"
+//                     value={ticketToken}
+//                     onChange={(e) => setTicketToken(e.target.value)}
+//                 />
+//                 <button
+//                     className="w-full bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600 transition duration-300"
+//                     onClick={handleVerifyTicket}
+//                 >
+//                     Verify Ticket
+//                 </button>
+//             </div>
+
+
+//             {showModal && generatedTicket && (
+//                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+//                     <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+//                         <h2 className="text-xl font-semibold mb-4">Ticket Details</h2>
+//                         <pre>{JSON.stringify(generatedTicket, null, 2)}</pre>
+//                         <button
+//                             onClick={handleDownload}
+//                             className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+//                         >
+//                             Download Ticket as JSON
+//                         </button>
+//                         <button
+//                             onClick={() => setShowModal(false)}
+//                             className="mt-2 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
+//                         >
+//                             Close
+//                         </button>
+//                     </div>
+//                 </div>
+//             )}
+
+
+//             {error && <p className="mt-4 text-red-500">{error}</p>}
+//             {success && <p className="mt-4 text-green-500">{success}</p>}
+//         </div>
+//     );
+// };
+
+// export default Dashboard; */
