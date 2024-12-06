@@ -1,53 +1,10 @@
-// // backend/controllers/payment.controller.js
-
-// import  { v4 as uuidv4 } from 'uuid';
-// import { Ticket } from '../models/ticket.model.js';
-
-// // Dummy payment controller
-// const buyTicket = async (req, res) => {
-//     const { source, destination, price } = req.body;
-
-//     if (!price || !source || !destination) {
-//         return res.status(400).send('Missing required fields: source, destination, or price');
-//     }
-
-//     try {
-//         // Simulate payment success
-//         const ticketToken = uuidv4(); // Unique ticket ID
-//         const saveTiket = { ticketToken, source, destination, price };
-//         // Save ticket to database
-        
-//         const ticket = new Ticket(saveTiket);
-//         await ticket.save();
-
-//         res.status(200).json({
-//             success: true,
-//             message: 'Payment successful',
-//             ticket: {
-//                 token: ticketToken,
-//                 source,
-//                 destination,
-//                 price,
-//                 issuedAt: new Date().toISOString(),
-//             },
-//         });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: 'Payment failed', error });
-//     }
-// };
-
-// export default  buyTicket
-
-
 import { v4 as uuidv4 } from 'uuid';
 import { Ticket } from '../models/ticket.model.js';
 
 const buyTicket = async (req, res) => {
-
-    console.log('Authenticated User:', req.user);
     const { source, destination, price } = req.body;
 
-    // Assuming userId comes from the authenticated user's token (req.user)
+    
     const userId = req.user ? req.user._id : null;
 
     if (!price || !source || !destination) {
@@ -55,10 +12,21 @@ const buyTicket = async (req, res) => {
     }
 
     try {
-        const ticketToken = uuidv4(); // Unique ticket ID
-        const saveTicket = { userId, ticketToken, source, destination, price };
+        const ticketToken = uuidv4(); 
+        const issuedAt = new Date(); 
+        const expiresAt = new Date(issuedAt.getTime() + 1 * 60 * 1000); 
 
-        // Save ticket to database
+        const saveTicket = { 
+            userId, 
+            ticketToken, 
+            source, 
+            destination, 
+            price,
+            issuedAt,
+            expiresAt 
+        };
+
+        
         const ticket = new Ticket(saveTicket);
         await ticket.save();
 
@@ -71,7 +39,8 @@ const buyTicket = async (req, res) => {
                 source,
                 destination,
                 price,
-                issuedAt: ticket.issuedAt,
+                issuedAt,
+                expiresAt, 
             },
         });
     } catch (error) {

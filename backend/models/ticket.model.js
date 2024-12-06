@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const ticketSchema = new mongoose.Schema({
     userId: {
-        type: mongoose.Schema.Types.ObjectId, // Reference to User collection
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     },
     source: {
@@ -22,11 +22,18 @@ const ticketSchema = new mongoose.Schema({
     },
     issuedAt: {
         type: Date,
-        default: Date.now, // Automatically sets to the current date/time
+        default: Date.now, 
+    },
+    expiresAt: {
+        type: Date,
+        default: function () {
+            
+            return new Date(this.issuedAt.getTime() + 1 * 60 * 1000);
+        },
     },
     status: {
         type: String,
-        enum: ['Active', 'Cancelled', 'Completed'], // Track ticket status
+        enum: ['Active', 'In-journey', 'Completed'], 
         default: 'Active',
     },
     ticketToken: {
@@ -35,10 +42,13 @@ const ticketSchema = new mongoose.Schema({
         required: true,
     },
 }, {
-    timestamps: true, // Automatically add createdAt and updatedAt fields
+    timestamps: true,
 });
 
-// Ensure unique ticket token generation on each save
+
+ticketSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+
+
 ticketSchema.pre('save', function (next) {
     if (!this.ticketToken) {
         this.ticketToken = `TICKET-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
