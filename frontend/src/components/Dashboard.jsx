@@ -1,394 +1,271 @@
-// import React, { useState, useEffect } from 'react';
-// import { initiatePayment, verifyTicketToken } from '../api'; // Import necessary API functions
-// import { saveAs } from 'file-saver';  // Import the file-saver library
-// import ValidateTicketSection from './validateuser';
-// import ReactQRCode from 'react-qr-code';
-// import ValidateTicketSection2 from './vlue';
+
+
+
+// import React, { useState, useEffect } from "react";
+// import { initiatePayment } from "../api.js"; // API call
+
+// const metroData = {
+//   "lines": [
+//     {
+//       "line": "Line-1",
+//       "name": "Versova-Andheri-Ghatkopar",
+//       "stations": ["Versova", "DN Nagar", "Azad Nagar", "Andheri", "Western Express Highway", "Chakala (JB Nagar)", "Marol Naka", "Saki Naka", "Asalpha", "Jagruti Nagar", "Ghatkopar"]
+//     },
+//     {
+//       "line": "Line-2A",
+//       "name": "Dahisar East-DN Nagar",
+//       "stations": ["Dahisar East", "Anand Nagar", "Kandarpada", "Kandivali West", "Shimpoli", "Borivali West", "Shivaji Nagar", "Link Road Goregaon West", "DN Nagar"]
+//     },
+//     {
+//       "line": "Line-2B",
+//       "name": "DN Nagar-Bandra-Mankhurd",
+//       "stations": ["DN Nagar", "Juhu Circle", "Santacruz West", "Bandra West", "Kalanagar", "Bandra Kurla Complex", "Kurla East", "Chembur", "Mankhurd"]
+//     },
+//     {
+//       "line": "Line-4",
+//       "name": "Wadala-Kasarvadavali",
+//       "stations": ["Wadala", "Bhakti Park", "Amar Mahal", "Ghatkopar", "Mulund", "Teen Hath Naka", "Kasarvadavali"]
+//     },
+//     {
+//       "line": "Line-5",
+//       "name": "Thane-Bhiwandi-Kalyan",
+//       "stations": ["Thane", "Bhiwandi", "Kalyan"]
+//     },
+//     {
+//       "line": "Line-6",
+//       "name": "Swami Samarth Nagar-Vikhroli",
+//       "stations": ["Swami Samarth Nagar", "Jogeshwari", "SEEPZ", "Powai", "Vikhroli"]
+//     },
+//     {
+//       "line": "Line-7",
+//       "name": "Dahisar East-Gundavali",
+//       "stations": ["Dahisar East", "Kandarpada", "Borivali East", "Magathane", "Poinsur", "Gundavali"]
+//     },
+//     {
+//       "line": "Line-9 & 7A",
+//       "name": "Dahisar East-Mira Bhayandar and Andheri East-CSMIA",
+//       "stations": ["Dahisar East", "Mira Road", "Bhayandar", "Andheri East", "CSMIA"]
+//     }
+//   ],
+//   "features": {
+//     "viaRoutes": true
+//   }
+// }
+
+
 
 // const Dashboard = () => {
-//     const [selectedLine, setSelectedLine] = useState('');
-//     const [source, setSource] = useState('');
-//     const [destination, setDestination] = useState('');
-//     const [price, setPrice] = useState(0);
-//     const [stations, setStations] = useState([]);
-//     const [ticketToken, setTicketToken] = useState(localStorage.getItem('ticketToken') || ''); // Retrieve token from localStorage if available
-//     const [ticket, setTicket] = useState(null);
-//     const [error, setError] = useState('');
-//     const [success, setSuccess] = useState('');
-//     const [showModal, setShowModal] = useState(false);  // Manage modal visibility
-//     const [generatedTicket, setGeneratedTicket] = useState(null); // Store generated ticket details
-//     const token = localStorage.getItem('token');
+//   const [selectedLine, setSelectedLine] = useState("");
+//   const [source, setSource] = useState("");
+//   const [destination, setDestination] = useState("");
+//   const [price, setPrice] = useState(0);
+//   const [stations, setStations] = useState([]);
+//   const [error, setError] = useState("");
+//   const [success, setSuccess] = useState("");
+//   const token = localStorage.getItem("token");
 
-//     const metroData = [
-//         {
-//             line: "Line 1",
-//             stations: [
-//                 { name: "Versova", distanceFromStart: 0 },
-//                 { name: "D N Nagar", distanceFromStart: 1.5 },
-//                 { name: "Azad Nagar", distanceFromStart: 3.0 },
-//                 { name: "Andheri", distanceFromStart: 5.0 },
-//                 { name: "Ghatkopar", distanceFromStart: 11.4 },
-//             ],
-//         },
-//         {
-//             line: "Line 2A",
-//             stations: [
-//                 { name: "Dahisar East", distanceFromStart: 0 },
-//                 { name: "Anand Nagar", distanceFromStart: 2.0 },
-//                 { name: "Borivali West", distanceFromStart: 5.0 },
-//             ],
-//         },
-//     ];
-
-//     // Ensure the user is logged in
+//   useEffect(() => {
 //     if (!token) {
-//         window.location.href = '/login';
+//       window.location.href = "/login";
 //     }
+//     if (selectedLine) {
+//       const lineData = metroData.lines.find((line) => line.line === selectedLine);
+//       setStations(lineData ? lineData.stations : []);
+//     } else {
+//       setStations([]);
+//     }
+//   }, [selectedLine]);
 
-//     // Clear the ticket token input when the page is refreshed
-//     useEffect(() => {
-//         setTicketToken('');
-//     }, []);
+//   const calculatePrice = () => {
+//     const sourceIndex = stations.indexOf(source);
+//     const destinationIndex = stations.indexOf(destination);
 
-//     // Update the stations based on the selected line
-//     useEffect(() => {
-//         const selectedMetro = metroData.find((line) => line.line === selectedLine);
-//         if (selectedMetro) {
-//             setStations(selectedMetro.stations);
-//             setSource('');
-//             setDestination('');
-//         } else {
-//             setStations([]);
-//             setSource('');
-//             setDestination('');
-//         }
-//     }, [selectedLine]);
+//     if (sourceIndex !== -1 && destinationIndex !== -1) {
+//       const distance = Math.abs(destinationIndex - sourceIndex);
+//       setPrice(distance * 10); // ₹10 per station
+//       setError("");
+//     } else {
+//       setPrice(0);
+//       setError("Please select valid source and destination stations.");
+//     }
+//   };
 
-//     const calculatePrice = () => {
-//         const sourceStation = stations.find(station => station.name === source);
-//         const destinationStation = stations.find(station => station.name === destination);
+//   const handlePayment = async () => {
+//     if (!source || !destination || price === 0) {
+//       setError("Complete all fields and calculate the price before proceeding.");
+//       return;
+//     }
+//     try {
+//       const paymentData = { source, destination, price };
+//       const response = await initiatePayment(paymentData);
+//       setSuccess(`Payment successful! Ticket Token: ${response.data.ticket.ticketToken}`);
+//       setError("");
+//       setSelectedLine("");
+//       setSource("");
+//       setDestination("");
+//       setPrice(0);
+//     } catch (err) {
+//       setError("An error occurred during payment. Please try again.");
+//       console.error(err);
+//     }
+//   };
 
-//         if (sourceStation && destinationStation) {
-//             const distance = Math.abs(destinationStation.distanceFromStart - sourceStation.distanceFromStart);
-//             setPrice(distance * 10); // ₹10 per km
-//             setError('');
-//         } else {
-//             setPrice(0);
-//             setError('Please select valid source and destination stations.');
-//         }
-//     };
+//   return (
+//     <div className="mt-6 p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+//       <h1 className="text-2xl font-bold mb-6 text-center">Book Tickets</h1>
+//       <div className="mb-4">
+//         <label className="block text-gray-700 mb-2">Select Line:</label>
+//         <select
+//           className="w-full border border-gray-300 rounded px-3 py-2"
+//           value={selectedLine}
+//           onChange={(e) => setSelectedLine(e.target.value)}
+//         >
+//           <option value="">Select Line</option>
+//           {metroData.lines.map((line) => (
+//             <option key={line.line} value={line.line}>
+//               {line.name}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
 
-//     const handlePayment = async () => {
-//         if (!source || !destination || price === 0) {
-//             setError('Complete all fields and calculate the price before proceeding.');
-//             return;
-//         }
-//         try {
-//             const paymentData = { source, destination, price };
-//             const response = await initiatePayment(paymentData);
+//       <div className="mb-4">
+//         <label className="block text-gray-700 mb-2">Select Source:</label>
+//         <select
+//           className="w-full border border-gray-300 rounded px-3 py-2"
+//           value={source}
+//           onChange={(e) => setSource(e.target.value)}
+//           disabled={!stations.length}
+//         >
+//           <option value="">Select Source</option>
+//           {stations.map((station) => (
+//             <option key={station} value={station}>
+//               {station}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
 
-//             // Generate the ticket object after successful payment
-//             const ticketData = {
-//                 userId: token, // Assuming token is the user ID
-//                 source,
-//                 destination,
-//                 ticketId: response.data.ticket.token,
-//                 issuedAt: new Date(),
-//                 price,
-//                 status: 'Paid',
-//             };
+//       <div className="mb-4">
+//         <label className="block text-gray-700 mb-2">Select Destination:</label>
+//         <select
+//           className="w-full border border-gray-300 rounded px-3 py-2"
+//           value={destination}
+//           onChange={(e) => setDestination(e.target.value)}
+//           disabled={!stations.length}
+//         >
+//           <option value="">Select Destination</option>
+//           {stations.map((station) => (
+//             <option key={station} value={station}>
+//               {station}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
 
-//             // Store the generated ticket token in localStorage
-//             localStorage.setItem('ticketToken', response.data.ticket.token);
+//       <button
+//         className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
+//         onClick={calculatePrice}
+//       >
+//         Calculate Price
+//       </button>
 
-//             setGeneratedTicket(ticketData); // Store generated ticket data
-//             setSuccess('Payment successful! Ticket generated.');
-//             setShowModal(true); // Show the modal
-//             setError('');
-//         } catch (err) {
-//             setError('An error occurred during payment. Please try again.');
-//             console.error(err);
-//         }
-//     };
+//       {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
 
-//     const handleVerifyTicket = async () => {
-//         // Use the ticket token from localStorage if it's available
-//         const tokenToVerify = ticketToken || localStorage.getItem('ticketToken');
+//       <button
+//         className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+//         onClick={handlePayment}
+//       >
+//         Proceed to Payment
+//       </button>
 
-//         if (!tokenToVerify) {
-//             setError('Please enter a valid ticket token.');
-//             return;
-//         }
-
-//         try {
-//             const response = await verifyTicketToken(tokenToVerify);
-//             if (response.data.success) {
-//                 setTicket(response.data.ticket);
-//                 setError('');
-//                 setSuccess('Ticket verified successfully.');
-//             } else {
-//                 setError('Ticket not found.');
-//                 setTicket(null);
-//             }
-//         } catch (err) {
-//             setError('An error occurred while verifying the ticket.');
-//             console.error(err);
-//         }
-//     };
-
-//     // Function to download the ticket as a file
-//     const downloadTicket = () => {
-//         const ticketData = {
-//             source: generatedTicket.source,
-//             destination: generatedTicket.destination,
-//             price: generatedTicket.price,
-//             issuedAt: new Date(generatedTicket.issuedAt).toLocaleString(),
-//             status: generatedTicket.status,
-//             ticketToken: generatedTicket.ticketId,
-//         };
-
-//         const blob = new Blob([JSON.stringify(ticketData, null, 2)], {
-//             type: 'application/json',
-//         });
-//         saveAs(blob, `ticket_${generatedTicket.ticketId}.json`); // Save the ticket as a .json file
-//     };
-
-//     const handleLogout = () => {
-//         localStorage.removeItem('token'); // Remove the token from localStorage
-//         localStorage.removeItem('ticketToken'); // Remove ticket token as well
-//         window.location.href = '/login'; // Redirect to login page
-//     };
-
-//     return (
-//         <div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
-//             <h1 className="text-2xl font-bold mb-6 text-center">Metro Ticket Booking</h1>
-
-//             {/* Logout Button */}
-//             <button
-//                 onClick={handleLogout}
-//                 className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 mb-4"
-//             >
-//                 Logout
-//             </button>
-
-//             {/* Line Selection */}
-//             <div className="mb-4">
-//                 <label className="block text-gray-700 mb-2">Select Line:</label>
-//                 <select
-//                     className="w-full border border-gray-300 rounded px-3 py-2"
-//                     value={selectedLine}
-//                     onChange={(e) => setSelectedLine(e.target.value)}
-//                 >
-//                     <option value="">Select Line</option>
-//                     {metroData.map((line) => (
-//                         <option key={line.line} value={line.line}>
-//                             {line.line}
-//                         </option>
-//                     ))}
-//                 </select>
-//             </div>
-
-//             {/* Source Selection */}
-//             <div className="mb-4">
-//                 <label className="block text-gray-700 mb-2">Select Source:</label>
-//                 <select
-//                     className="w-full border border-gray-300 rounded px-3 py-2"
-//                     value={source}
-//                     onChange={(e) => setSource(e.target.value)}
-//                     disabled={stations.length === 0}
-//                 >
-//                     <option value="">Select Source</option>
-//                     {stations.map((station) => (
-//                         <option key={station.name} value={station.name}>
-//                             {station.name}
-//                         </option>
-//                     ))}
-//                 </select>
-//             </div>
-
-//             {/* Destination Selection */}
-//             <div className="mb-4">
-//                 <label className="block text-gray-700 mb-2">Select Destination:</label>
-//                 <select
-//                     className="w-full border border-gray-300 rounded px-3 py-2"
-//                     value={destination}
-//                     onChange={(e) => setDestination(e.target.value)}
-//                     disabled={stations.length === 0}
-//                 >
-//                     <option value="">Select Destination</option>
-//                     {stations.map((station) => (
-//                         <option key={station.name} value={station.name}>
-//                             {station.name}
-//                         </option>
-//                     ))}
-//                 </select>
-//             </div>
-
-//             {/* Calculate Price Button */}
-//             <button
-//                 className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
-//                 onClick={calculatePrice}
-//             >
-//                 Calculate Price
-//             </button>
-
-//             {/* Display Price */}
-//             {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
-
-//             {/* Proceed to Payment Button */}
-//             <button
-//                 className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
-//                 onClick={handlePayment}
-//             >
-//                 Proceed to Payment
-//             </button>
-
-//             {/* Ticket Token Verification */}
-//             <div className="mt-6">
-//                 <h2 className="text-xl font-semibold mb-4">Verify Ticket Token</h2>
-//                 <input
-//                     type="text"
-//                     className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-//                     value={ticketToken}
-//                     onChange={(e) => setTicketToken(e.target.value)}
-//                     placeholder="Enter Ticket Token"
-//                 />
-//                 <button
-//                     className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-//                     onClick={handleVerifyTicket}
-//                 >
-//                     Verify Ticket
-//                 </button>
-
-//                 {/* Display Ticket Information */}
-//                 {ticket && (
-//                     <div className="mt-6 p-4 border border-gray-300 rounded">
-//                         <p><strong>Source:</strong> {ticket.source}</p>
-//                         <p><strong>Destination:</strong> {ticket.destination}</p>
-//                         <p><strong>Price:</strong> ₹{ticket.price}</p>
-//                         <p><strong>Issued At:</strong> {new Date(ticket.issuedAt).toLocaleString()}</p>
-//                         <p><strong>Status:</strong> {ticket.status}</p>
-//                     </div>
-//                 )}
-//             </div>
-
-//             {/* Modal - Ticket Details */}
-//             {showModal && generatedTicket && (
-//     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-//         <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-//             <h2 className="text-2xl font-semibold mb-4">Your Ticket</h2>
-//             <div className="space-y-4">
-//                 <p><strong>Source:</strong> {generatedTicket.source}</p>
-//                 <p><strong>Destination:</strong> {generatedTicket.destination}</p>
-//                 <p><strong>Price:</strong> ₹{generatedTicket.price}</p>
-//                 <p><strong>Issued At:</strong> {new Date(generatedTicket.issuedAt).toLocaleString()}</p>
-//                 <p><strong>Status:</strong> {generatedTicket.status}</p>
-//                 <p><strong>Ticket Token:</strong> {generatedTicket.ticketId}</p>
-//                 </div>
-//                 <div className="mt-4">
-//     <ReactQRCode value={JSON.stringify(generatedTicket)} size={150} />
-
-// </div>
-
-//             <button
-//                 onClick={downloadTicket}
-//                 className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-//             >
-//                 Download Ticket
-//             </button>
-//             <button
-//                 onClick={() => setShowModal(false)}
-//                 className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-//             >
-//                 Close
-//             </button>
-//         </div>
+//       {error && <p className="mt-4 text-red-500">{error}</p>}
+//       {success && <p className="mt-4 text-green-500">{success}</p>}
 //     </div>
-// )}
-
-//             {/* Error and Success Messages */}
-//             {error && <p className="mt-4 text-red-500">{error}</p>}
-//             {success && <p className="mt-4 text-green-500">{success}</p>}
-//             <ValidateTicketSection />
-//             <ValidateTicketSection2/>
-
-//         </div>
-//     );
+//   );
 // };
 
 // export default Dashboard;
 
+
 import React, { useState, useEffect } from "react";
-import { initiatePayment, verifyTicketToken } from "../api";
-import { saveAs } from "file-saver";
-import ValidateTicketSection from "./validateuser";
-import ReactQRCode from "react-qr-code";
-import ValidateTicketSection2 from "./validateuser2";
-import { TbTrain } from "react-icons/tb";
+import { initiatePayment } from "../api.js"; // API call
+
+const metroData = {
+  "lines": [
+    {
+      "line": "Line-1",
+      "name": "Versova-Andheri-Ghatkopar",
+      "stations": ["Versova", "DN Nagar", "Azad Nagar", "Andheri", "Western Express Highway", "Chakala (JB Nagar)", "Marol Naka", "Saki Naka", "Asalpha", "Jagruti Nagar", "Ghatkopar"]
+    },
+    {
+      "line": "Line-2A",
+      "name": "Dahisar East-DN Nagar",
+      "stations": ["Dahisar East", "Anand Nagar", "Kandarpada", "Kandivali West", "Shimpoli", "Borivali West", "Shivaji Nagar", "Link Road Goregaon West", "DN Nagar"]
+    },
+    {
+      "line": "Line-2B",
+      "name": "DN Nagar-Bandra-Mankhurd",
+      "stations": ["DN Nagar", "Juhu Circle", "Santacruz West", "Bandra West", "Kalanagar", "Bandra Kurla Complex", "Kurla East", "Chembur", "Mankhurd"]
+    },
+    {
+      "line": "Line-4",
+      "name": "Wadala-Kasarvadavali",
+      "stations": ["Wadala", "Bhakti Park", "Amar Mahal", "Ghatkopar", "Mulund", "Teen Hath Naka", "Kasarvadavali"]
+    },
+    {
+      "line": "Line-5",
+      "name": "Thane-Bhiwandi-Kalyan",
+      "stations": ["Thane", "Bhiwandi", "Kalyan"]
+    },
+    {
+      "line": "Line-6",
+      "name": "Swami Samarth Nagar-Vikhroli",
+      "stations": ["Swami Samarth Nagar", "Jogeshwari", "SEEPZ", "Powai", "Vikhroli"]
+    },
+    {
+      "line": "Line-7",
+      "name": "Dahisar East-Gundavali",
+      "stations": ["Dahisar East", "Kandarpada", "Borivali East", "Magathane", "Poinsur", "Gundavali"]
+    },
+    {
+      "line": "Line-9 & 7A",
+      "name": "Dahisar East-Mira Bhayandar and Andheri East-CSMIA",
+      "stations": ["Dahisar East", "Mira Road", "Bhayandar", "Andheri East", "CSMIA"]
+    }
+  ],
+  "features": {
+    "viaRoutes": true
+  }
+}
+
 const Dashboard = () => {
-  const [selectedLine, setSelectedLine] = useState("");
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [price, setPrice] = useState(0);
   const [stations, setStations] = useState([]);
-  const [ticketToken, setTicketToken] = useState(
-    localStorage.getItem("ticketToken") || ""
-  );
-  const [ticket, setTicket] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const [generatedTicket, setGeneratedTicket] = useState(null);
   const token = localStorage.getItem("token");
 
-  const metroData = [
-    {
-      line: "Line 1",
-      stations: [
-        { name: "Versova", distanceFromStart: 0 },
-        { name: "D N Nagar", distanceFromStart: 1.5 },
-        { name: "Azad Nagar", distanceFromStart: 3.0 },
-        { name: "Andheri", distanceFromStart: 5.0 },
-        { name: "Ghatkopar", distanceFromStart: 11.4 },
-      ],
-    },
-    {
-      line: "Line 2A",
-      stations: [
-        { name: "Dahisar East", distanceFromStart: 0 },
-        { name: "Anand Nagar", distanceFromStart: 2.0 },
-        { name: "Borivali West", distanceFromStart: 5.0 },
-      ],
-    },
-  ];
-
+  // Combine all stations from all lines into a single list
   useEffect(() => {
-    setTicketToken("");
+    if (!token) {
+      window.location.href = "/login";
+    }
+    const allStations = metroData.lines.reduce((acc, line) => {
+      return acc.concat(line.stations);
+    }, []);
+    setStations([...new Set(allStations)]); // Ensure no duplicates
   }, []);
 
-  useEffect(() => {
-    const selectedMetro = metroData.find((line) => line.line === selectedLine);
-    if (selectedMetro) {
-      setStations(selectedMetro.stations);
-      setSource("");
-      setDestination("");
-    } else {
-      setStations([]);
-      setSource("");
-      setDestination("");
-    }
-  }, [selectedLine]);
-
   const calculatePrice = () => {
-    const sourceStation = stations.find((station) => station.name === source);
-    const destinationStation = stations.find(
-      (station) => station.name === destination
-    );
-    if (sourceStation && destinationStation) {
-      const distance = Math.abs(
-        destinationStation.distanceFromStart - sourceStation.distanceFromStart
-      );
-      setPrice(distance * 10); // ₹10 per km
+    const sourceIndex = stations.indexOf(source);
+    const destinationIndex = stations.indexOf(destination);
+
+    if (sourceIndex !== -1 && destinationIndex !== -1) {
+      const distance = Math.abs(destinationIndex - sourceIndex);
+      setPrice(distance * 10); // ₹10 per station
       setError("");
     } else {
       setPrice(0);
@@ -398,316 +275,79 @@ const Dashboard = () => {
 
   const handlePayment = async () => {
     if (!source || !destination || price === 0) {
-      setError(
-        "Complete all fields and calculate the price before proceeding."
-      );
+      setError("Complete all fields and calculate the price before proceeding.");
       return;
     }
     try {
       const paymentData = { source, destination, price };
       const response = await initiatePayment(paymentData);
-
-      const ticketData = {
-        userId: token,
-        source,
-        destination,
-        ticketId: response.data.ticket.token,
-        issuedAt: new Date(),
-        price,
-        status: "Paid",
-      };
-
-      localStorage.setItem("ticketToken", response.data.ticket.token);
-      setGeneratedTicket(ticketData);
-      setSuccess("Payment successful! Ticket generated.");
-      setShowModal(true);
+      setSuccess(`Payment successful! Ticket Token: ${response.data.ticket.ticketToken}`);
       setError("");
+      setSource("");
+      setDestination("");
+      setPrice(0);
     } catch (err) {
       setError("An error occurred during payment. Please try again.");
       console.error(err);
     }
   };
 
-  const handleVerifyTicket = async () => {
-    const tokenToVerify = ticketToken || localStorage.getItem("ticketToken");
-    if (!tokenToVerify) {
-      setError("Please enter a valid ticket token.");
-      return;
-    }
-
-    try {
-      const response = await verifyTicketToken(tokenToVerify);
-      if (response.data.success) {
-        setTicket(response.data.ticket);
-        setError("");
-        setSuccess("Ticket verified successfully.");
-      } else {
-        setError("Ticket not found.");
-        setTicket(null);
-      }
-    } catch (err) {
-      setError("An error occurred while verifying the ticket.");
-      console.error(err);
-    }
-  };
-
-  const downloadTicket = () => {
-    const ticketData = {
-      source: generatedTicket.source,
-      destination: generatedTicket.destination,
-      price: generatedTicket.price,
-      issuedAt: new Date(generatedTicket.issuedAt).toLocaleString(),
-      status: generatedTicket.status,
-      ticketToken: generatedTicket.ticketId,
-    };
-
-    const blob = new Blob([JSON.stringify(ticketData, null, 2)], {
-      type: "application/json",
-    });
-    saveAs(blob, `ticket_${generatedTicket.ticketId}.json`);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("ticketToken");
-    window.location.href = "/login";
-  };
-
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-6 text-center flex items-center justify-center">
-        <TbTrain className="text-3xl mr-2" />
-        Metro Ticket Booking
-      </h1>
+    <div className="mt-6 p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
+      <h1 className="text-2xl font-bold mb-6 text-center">Book Tickets</h1>
 
-      {/* Logout Button */}
-      <button
-        onClick={handleLogout}
-        className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 transition duration-300 mb-6"
-      >
-        Logout
-      </button>
-
-      {/* Line Selection */}
-      <section className="mb-6">
-        <label className="block text-gray-700 mb-2">Select Line:</label>
+      {/* Removed the Select Line dropdown */}
+      
+      <div className="mb-4">
+        <label className="block text-gray-700 mb-2">Select Source:</label>
         <select
           className="w-full border border-gray-300 rounded px-3 py-2"
-          value={selectedLine}
-          onChange={(e) => setSelectedLine(e.target.value)}
+          value={source}
+          onChange={(e) => setSource(e.target.value)}
         >
-          <option value="">Select Line</option>
-          {metroData.map((line) => (
-            <option key={line.line} value={line.line}>
-              {line.line}
+          <option value="">Select Source</option>
+          {stations.map((station) => (
+            <option key={station} value={station}>
+              {station}
             </option>
           ))}
         </select>
-      </section>
-
-      {/* Source and Destination Selection */}
-      <section className="grid grid-cols-2 gap-4 mb-6">
-        <div>
-          <label className="block text-gray-700 mb-2">Select Source:</label>
-          <select
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            value={source}
-            onChange={(e) => setSource(e.target.value)}
-            disabled={stations.length === 0}
-          >
-            <option value="">Select Source</option>
-            {stations.map((station) => (
-              <option key={station.name} value={station.name}>
-                {station.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-gray-700 mb-2">
-            Select Destination:
-          </label>
-          <select
-            className="w-full border border-gray-300 rounded px-3 py-2"
-            value={destination}
-            onChange={(e) => setDestination(e.target.value)}
-            disabled={stations.length === 0}
-          >
-            <option value="">Select Destination</option>
-            {stations.map((station) => (
-              <option key={station.name} value={station.name}>
-                {station.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </section>
-
-      {/* Price Calculation and Payment */}
-      <section className="mb-6">
-        <button
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-          onClick={calculatePrice}
-        >
-          Calculate Price
-        </button>
-        {price > 0 && (
-          <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>
-        )}
-        <button
-          className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
-          onClick={handlePayment}
-        >
-          Proceed to Payment
-        </button>
-      </section>
-
-      {/* Ticket Verification */}
-      <section className="mt-6">
-        <h2 className="text-xl font-semibold mb-4">Verify Ticket Token</h2>
-        <input
-          type="text"
-          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-          value={ticketToken}
-          onChange={(e) => setTicketToken(e.target.value)}
-          placeholder="Enter Ticket Token"
-        />
-        <button
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300"
-          onClick={handleVerifyTicket}
-        >
-          Verify Ticket
-        </button>
-
-        {ticket && (
-          <div className="mt-6 p-4 border border-gray-300 rounded">
-            <p>
-              <strong>Source:</strong> {ticket.source}
-            </p>
-            <p>
-              <strong>Destination:</strong> {ticket.destination}
-            </p>
-            <p>
-              <strong>Price:</strong> ₹{ticket.price}
-            </p>
-            <p>
-              <strong>Issued At:</strong>{" "}
-              {new Date(ticket.issuedAt).toLocaleString()}
-            </p>
-            <p>
-              <strong>Status:</strong> {ticket.status}
-            </p>
-          </div>
-        )}
-      </section>
-
-      {/* Modal - Ticket Details */}
-      {/* {showModal && generatedTicket && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-2xl font-semibold mb-4">Your Ticket</h2>
-            <div className="space-y-4">
-              <p>
-                <strong>Source:</strong> {generatedTicket.source}
-              </p>
-              <p>
-                <strong>Destination:</strong> {generatedTicket.destination}
-              </p>
-              <p>
-                <strong>Price:</strong> ₹{generatedTicket.price}
-              </p>
-              <p>
-                <strong>Issued At:</strong>{" "}
-                {new Date(generatedTicket.issuedAt).toLocaleString()}
-              </p>
-              <p>
-                <strong>Status:</strong> {generatedTicket.status}
-              </p>
-              <p>
-                <strong>Ticket Token:</strong> {generatedTicket.ticketId}
-              </p>
-            </div>
-            <div className="mt-4 justify-between">
-              <ReactQRCode value={JSON.stringify(generatedTicket)} size={150} />
-            </div>
-            <button
-              onClick={downloadTicket}
-              className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-            >
-              Download Ticket
-            </button>
-            <button
-              onClick={() => setShowModal(false)}
-              className="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )} */}
-      {showModal && generatedTicket && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 max-h-[80vh] overflow-y-auto relative">
-      <h2 className="text-2xl font-semibold mb-4">Your Ticket</h2>
-      <div className="space-y-4">
-        <p>
-          <strong>Source:</strong> {generatedTicket.source}
-        </p>
-        <p>
-          <strong>Destination:</strong> {generatedTicket.destination}
-        </p>
-        <p>
-          <strong>Price:</strong> ₹{generatedTicket.price}
-        </p>
-        <p>
-          <strong>Issued At:</strong>{" "}
-          {new Date(generatedTicket.issuedAt).toLocaleString()}
-        </p>
-        <p>
-          <strong>Status:</strong> {generatedTicket.status}
-        </p>
-        <p>
-          <strong>Ticket Token:</strong> {generatedTicket.ticketId}
-        </p>
       </div>
 
-      
-      <div className="mt-4 flex justify-center items-center mb-4">
-        <ReactQRCode value={JSON.stringify(generatedTicket)} size={150} />
+      <div className="mb-4">
+        <label className="block text-gray-700 mb-2">Select Destination:</label>
+        <select
+          className="w-full border border-gray-300 rounded px-3 py-2"
+          value={destination}
+          onChange={(e) => setDestination(e.target.value)}
+        >
+          <option value="">Select Destination</option>
+          {stations.map((station) => (
+            <option key={station} value={station}>
+              {station}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <div className="flex justify-between gap-4 mt-4">
-        <button
-          onClick={downloadTicket}
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-        >
-          Download Ticket
-        </button>
-        <button
-          onClick={() => setShowModal(false)}
-          className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      <button
+        className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 mb-4"
+        onClick={calculatePrice}
+      >
+        Calculate Price
+      </button>
 
+      {price > 0 && <p className="text-xl text-green-600 mb-4">Price: ₹{price}</p>}
 
-      {/* Error and Success Messages */}
+      <button
+        className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300"
+        onClick={handlePayment}
+      >
+        Proceed to Payment
+      </button>
+
       {error && <p className="mt-4 text-red-500">{error}</p>}
       {success && <p className="mt-4 text-green-500">{success}</p>}
-
-      {/* Flexbox container for ValidateTicketSections */}
-      <div className="flex gap-6 mt-6">
-        <div className="flex-1">
-          <ValidateTicketSection />
-        </div>
-        <div className="flex-1">
-          <ValidateTicketSection2 />
-        </div>
-      </div>
     </div>
   );
 };
