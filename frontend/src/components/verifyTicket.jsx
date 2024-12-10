@@ -75,6 +75,7 @@ const VerifyTicket = () => {
             <p><strong className="font-semibold">Price:</strong> {ticket.price}rs</p>
             <p><strong className="font-semibold">Issue Date:</strong> {new Date(ticket.issuedAt).toLocaleString()}</p>
             <p><strong className="font-semibold">Ticket Expiry:</strong> {new Date(ticket.expiredAt).toLocaleString()}</p>
+            <p><strong className="font-semibold">Ticket Status:</strong> {ticket.status}</p>
           </div>
         </div>
       )}

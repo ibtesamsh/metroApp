@@ -3,7 +3,7 @@ import { Ticket } from "../models/ticket.model.js";
 
 const completeJourney = async (req, res) => {
     const { ticketToken, exitStation } = req.body;
-    console.log(req.body);
+    
 
     try {
         const ticket = await Ticket.findOne({ ticketToken });

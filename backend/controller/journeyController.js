@@ -76,7 +76,7 @@ import { Ticket } from "../models/ticket.model.js";
 
 const startJourney = async (req, res) => {
   const { ticketToken, source } = req.body;
-  console.log(req.body);
+  
 
   try {
     const ticket = await Ticket.findOne({ ticketToken });
@@ -86,7 +86,7 @@ const startJourney = async (req, res) => {
     if (ticket.status !== "Active") {
       return res
         .status(400)
-        .json({ message: "Ticket is not active or already used" });
+        .json({ message: "Ticket is not active or already used or Expired" });
     }
 
     const currentTime = new Date();
