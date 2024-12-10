@@ -13,16 +13,14 @@ import getUserTickets from '../controller/myTicketController.js';
 
 
 
-// import ticketstatus from '../controller/ticketforward.js';
-// import verifyTicketToken from '../controller/verifyTicketToken.js';
-// import { fetchUserTickets, purchaseTicket } from '../controller/ticketController.js';
+
 const router = express.Router();
 
 router.post('/register', userRegister);
 router.post('/login', userLogin)
 router.post('/logout', authToken, userLogout);
 router.post('/validate-source',authToken,validateSourceInJourney)
-router.post('/verify-ticket-token', authToken, verifyTicketToken);
+router.post('/verify-ticket', authToken, verifyTicketToken);
 router.post('/validate-destination',authToken, validateDestinationValid)
 // router.post('/purchase-ticket', authToken, purchaseTicket);
 router.post('/buy-ticket', authToken , buyTicket);

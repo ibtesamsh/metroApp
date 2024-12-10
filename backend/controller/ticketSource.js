@@ -18,7 +18,7 @@ const validateSourceInJourney = async (req, res) => {
         }
 
         // Log the ticket to check its properties
-        console.log('Ticket:', ticket);
+        // console.log('Ticket:', ticket);
 
         // Find the line data from metroData based on the line provided in the request body
         const lineData = metroData.find((lineData) => lineData.line === line);
