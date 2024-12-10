@@ -19,11 +19,14 @@ const MyTickets = () => {
           return;
         }
 
-        const response = await axios.get("http://localhost:3000/api/my-ticket", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/my-ticket",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.data.tickets) {
           setTickets(response.data.tickets);
@@ -125,4 +128,3 @@ const MyTickets = () => {
 };
 
 export default MyTickets;
-
