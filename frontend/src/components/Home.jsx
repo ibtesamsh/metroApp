@@ -91,7 +91,101 @@
 // export default Home;
 
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import Dashboard from "./Dashboard";
+// import Logout from "./Logout";
+// import MyTickets from "./MyTickets";
+// import StartJourney from "./StartJourney";
+// import CompleteJourney from "./CompleteJourney";
+// import VerifyTicket from "./VerifyTicket";
+
+// const Home = () => {
+//   const [currentView, setCurrentView] = useState("bookTicket");
+
+//   const handleChangeView = (view) => setCurrentView(view);
+
+//   return (
+//     <div className="min-h-screen bg-gray-100 flex">
+//       {/* Sidebar */}
+//       <aside className="w-64 bg-blue-800 text-white p-6">
+//         <h2 className="text-2xl font-semibold mb-8">Metro Dashboard</h2>
+//         <nav className="space-y-4">
+//           <button
+//             className={`w-full text-left py-2 px-4 rounded-lg font-medium text-sm transition duration-300 ${
+//               currentView === "bookTicket"
+//                 ? "bg-blue-600"
+//                 : "bg-blue-700 hover:bg-blue-600"
+//             }`}
+//             onClick={() => handleChangeView("bookTicket")}
+//           >
+//             Book Ticket
+//           </button>
+//           <button
+//             className={`w-full text-left py-2 px-4 rounded-lg font-medium text-sm transition duration-300 ${
+//               currentView === "viewTicket"
+//                 ? "bg-blue-600"
+//                 : "bg-blue-700 hover:bg-blue-600"
+//             }`}
+//             onClick={() => handleChangeView("viewTicket")}
+//           >
+//             View Ticket
+//           </button>
+//           <button
+//             className={`w-full text-left py-2 px-4 rounded-lg font-medium text-sm transition duration-300 ${
+//               currentView === "startJourney"
+//                 ? "bg-blue-600"
+//                 : "bg-blue-700 hover:bg-blue-600"
+//             }`}
+//             onClick={() => handleChangeView("startJourney")}
+//           >
+//             Start Journey
+//           </button>
+//           <button
+//             className={`w-full text-left py-2 px-4 rounded-lg font-medium text-sm transition duration-300 ${
+//               currentView === "completeJourney"
+//                 ? "bg-blue-600"
+//                 : "bg-blue-700 hover:bg-blue-600"
+//             }`}
+//             onClick={() => handleChangeView("completeJourney")}
+//           >
+//             Complete Journey
+//           </button>
+//           <button
+//             className={`w-full text-left py-2 px-4 rounded-lg font-medium text-sm transition duration-300 ${
+//               currentView === "verifyTicket"
+//                 ? "bg-blue-600"
+//                 : "bg-blue-700 hover:bg-blue-600"
+//             }`}
+//             onClick={() => handleChangeView("verifyTicket")}
+//           >
+//             Verify Ticket
+//           </button>
+//           <div className="mt-8">
+//           <Logout/>
+//         </div>
+//         </nav>
+//       </aside>
+
+//       {/* Main Content Area */}
+//       <main className="flex-1 p-8">
+//         <div className="bg-white rounded-lg shadow-xl p-6">
+//           {currentView === "bookTicket" && <Dashboard />}
+//           {currentView === "viewTicket" && <MyTickets />}
+//           {currentView === "startJourney" && <StartJourney />}
+//           {currentView === "completeJourney" && <CompleteJourney />}
+//           {currentView === "verifyTicket" && <VerifyTicket />}
+//         </div>
+
+//         {/* Logout Section */}
+        
+//       </main>
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+import React, { useState } from "react"; 
 import Dashboard from "./Dashboard";
 import Logout from "./Logout";
 import MyTickets from "./MyTickets";
@@ -101,13 +195,28 @@ import VerifyTicket from "./VerifyTicket";
 
 const Home = () => {
   const [currentView, setCurrentView] = useState("bookTicket");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const handleChangeView = (view) => setCurrentView(view);
+  // Handle the view change and close the sidebar
+  const handleChangeView = (view) => {
+    setCurrentView(view);
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false); // Close the sidebar on mobile
+    }
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-blue-800 text-white p-6">
+      <aside
+        className={`${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 transition-transform duration-300 w-64 bg-blue-800 text-white p-6 fixed md:relative z-50`}
+      >
         <h2 className="text-2xl font-semibold mb-8">Metro Dashboard</h2>
         <nav className="space-y-4">
           <button
@@ -161,29 +270,62 @@ const Home = () => {
             Verify Ticket
           </button>
           <div className="mt-8">
-          <Logout/>
-        </div>
+            <Logout />
+          </div>
         </nav>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-8">
-        <div className="bg-white rounded-lg shadow-xl p-6">
+      <main
+        className={`flex-1 p-8 transition-all duration-300 ${
+          isSidebarOpen ? "ml-64" : "ml-0"
+        }`}
+      >
+        <div className="bg-white rounded-lg shadow-xl p-6 mx-auto w-full max-w-7xl">
           {currentView === "bookTicket" && <Dashboard />}
           {currentView === "viewTicket" && <MyTickets />}
           {currentView === "startJourney" && <StartJourney />}
           {currentView === "completeJourney" && <CompleteJourney />}
           {currentView === "verifyTicket" && <VerifyTicket />}
         </div>
-
-        {/* Logout Section */}
-        
       </main>
+
+      {/* Hamburger Menu Icon */}
+      <button
+        className="md:hidden absolute top-6 left-6 z-60"
+        onClick={toggleSidebar}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-8 w-8 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 6h16M4 12h16M4 18h16"
+          />
+        </svg>
+      </button>
+
+      {/* Close Sidebar on clicking outside */}
+      <div
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } fixed inset-0 bg-black opacity-50 md:hidden z-40`}
+        onClick={toggleSidebar}
+      ></div>
     </div>
   );
 };
 
 export default Home;
+
+
+
 
 
 
