@@ -197,7 +197,7 @@ const Home = () => {
   const [currentView, setCurrentView] = useState("bookTicket");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Handle the view change and close the sidebar
+ 
   const handleChangeView = (view) => {
     setCurrentView(view);
     if (window.innerWidth < 768) {

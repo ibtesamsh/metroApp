@@ -69,8 +69,8 @@ const VerifyTicket = () => {
         <div className="mt-6 p-4 bg-gray-100 rounded-md">
           <h3 className="text-xl font-medium text-gray-800">Ticket Details</h3>
           <div className="mt-2 space-y-2">
-            <p><strong className="font-semibold">Ticket Source:</strong> {ticket.source}</p>
-            <p><strong className="font-semibold">Ticket Destination:</strong> {ticket.destination}</p>
+            <p><strong className="font-semibold">Source:</strong> {ticket.source}</p>
+            <p><strong className="font-semibold">Destination:</strong> {ticket.destination}</p>
             <p><strong className="font-semibold">Via:</strong> {ticket.via}</p>
             <p><strong className="font-semibold">Price:</strong> {ticket.price}rs</p>
             <p><strong className="font-semibold">Issue Date:</strong> {new Date(ticket.issuedAt).toLocaleString()}</p>
