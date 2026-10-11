@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { registerUser } from "../api";
 import Button from "../components/ui/Button";
 import { Field, TextInput } from "../components/ui/Field";
+import PasswordInput from "../components/ui/PasswordInput";
 import { Card, Alert } from "../components/ui/Surfaces";
 import ThemeToggle from "../components/ui/ThemeToggle";
 import { TrainIcon } from "../components/ui/Icons";
@@ -13,6 +14,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -25,9 +27,17 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;                        // ← stops here, no register call
+    }
+
     setLoading(true);
     try {
-      await registerUser(formData);
+      const { confirmPassword, ...payload } = formData;   // strip confirmPassword
+      await registerUser(payload);
       setSuccess("Registration successful — redirecting to login…");
       setTimeout(() => navigate("/login"), 1200);
     } catch (err) {
@@ -86,16 +96,24 @@ const Register = () => {
               />
             </Field>
             <Field label="Password" htmlFor="password">
-              <TextInput
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 placeholder="At least 6 characters"
                 value={formData.password}
                 onChange={handleChange}
                 autoComplete="new-password"
-                minLength={6}
-                required
+              />
+            </Field>
+
+            <Field label="Confirm Password" htmlFor="confirmPassword">
+              <PasswordInput
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Re-enter your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                autoComplete="new-password"
               />
             </Field>
 

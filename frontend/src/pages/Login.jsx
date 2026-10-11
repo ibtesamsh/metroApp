@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { loginUser } from "../api";
 import Button from "../components/ui/Button";
 import { Field, TextInput } from "../components/ui/Field";
+import PasswordInput from "../components/ui/PasswordInput"; 
 import { Card, Alert } from "../components/ui/Surfaces";
 import ThemeToggle from "../components/ui/ThemeToggle";
 import { TrainIcon } from "../components/ui/Icons";
@@ -76,15 +77,13 @@ const Login = () => {
               />
             </Field>
             <Field label="Password" htmlFor="password">
-              <TextInput
+              <PasswordInput
                 id="password"
                 name="password"
-                type="password"
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
                 autoComplete="current-password"
-                required
               />
             </Field>
             <Button

@@ -106,6 +106,8 @@ const BookTicket = () => {
       description: `${source} → ${destination} (₹${price})`,
       theme: { color: "#0d9488" },
       handler: async (response) => {
+        setError("");                   
+        setSuccess("");                
         setLoading(true);
         try {
           const verifyRes = await verifyPayment({
@@ -130,14 +132,20 @@ const BookTicket = () => {
         }
       },
       modal: {
-        ondismiss: () =>
-          setError("Payment window closed before completing payment."),
+        ondismiss: () => {
+          setLoading(false);  
+          setError("Payment window closed before completing payment.");
+        }
       },
     });
 
-    checkout.on("payment.failed", (resp) =>
-      setError(resp.error?.description || "Payment failed. Please try again."),
-    );
+    checkout.on("payment.failed", (resp) => {
+      setError(resp.error?.description || "Payment failed. Please try again.");
+      setSuccess("");
+    });
+
+    setError("");                    
+    setSuccess(""); 
     checkout.open();
   };
 
