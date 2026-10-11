@@ -10,9 +10,13 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-export const redis = new Redis({
-  host: process.env.REDIS_HOST || "localhost",
-  port: process.env.REDIS_PORT || 6379,
+// export const redis = new Redis({
+//   host: process.env.REDIS_HOST || "localhost",
+//   port: process.env.REDIS_PORT || 6379,
+// });
+
+export const redis = new Redis(process.env.REDIS_URL, {
+  maxRetriesPerRequest: null, // recommended for ioredis on serverless-ish envs
 });
 
 redis.on("connect", () => console.log("Redis connected successfully"));
@@ -38,7 +42,7 @@ app.use((_req, res) =>
   res.status(404).json({ success: false, message: "Route not found." }),
 );
 
-app.listen(PORT, "192.168.0.188", () =>
+app.listen(PORT, () =>
   console.log(`Server is running on port ${PORT}`),
 );
 
