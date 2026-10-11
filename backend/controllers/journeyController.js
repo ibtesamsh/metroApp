@@ -1,4 +1,5 @@
 import { Ticket } from "../models/ticket.model.js";
+import { redis } from "../server.js";
 import { buildTicketRoute } from "../helper/metroUtils.js";
 
 export const startJourney = async (req, res) => {
@@ -22,6 +23,7 @@ export const startJourney = async (req, res) => {
     if (new Date() > ticket.expiredAt) {
       ticket.status = "Expired";
       await ticket.save();
+      await redis.del(`tickets:${ticket.userId}`);
       return res.status(400).json({ success: false, message: "Ticket has expired." });
     }
 
@@ -35,6 +37,7 @@ export const startJourney = async (req, res) => {
 
     ticket.status = "In Journey";
     await ticket.save();
+    await redis.del(`tickets:${ticket.userId}`);
 
     return res.status(200).json({ success: true, message: "Journey started successfully.", ticket });
   } catch (error) {
@@ -68,6 +71,7 @@ export const completeJourney = async (req, res) => {
 
     ticket.status = "Completed";
     await ticket.save();
+    await redis.del(`tickets:${ticket.userId}`);
 
     return res.status(200).json({ success: true, message: "Journey completed successfully.", ticket });
   } catch (error) {
