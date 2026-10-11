@@ -1,240 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import ReactQrcode from "react-qr-code";
-// import html2canvas from "html2canvas";
-// import { jsPDF } from "jspdf";
-// import { motion } from "framer-motion";
-// import { ChevronLeft, ChevronRight } from "lucide-react";
-// import { getMyTickets } from "../api";
-// import {
-//   Card,
-//   StatusBadge,
-//   Alert,
-//   SkeletonCard,
-// } from "../components/ui/Surfaces";
-// import Button from "../components/ui/Button";
-// import { TicketIcon } from "../components/ui/Icons";
-
-// const PAGE_SIZE = 10;
-
-// const MyTickets = () => {
-//   const [tickets, setTickets] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [page, setPage] = useState(1);
-
-//   useEffect(() => {
-//     (async () => {
-//       try {
-//         const res = await getMyTickets();
-//         setTickets(res.data.tickets || []);
-//       } catch (err) {
-//         setError(err.response?.data?.message || "Failed to fetch tickets.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     })();
-//   }, []);
-
-//   // reset to page 1 whenever the list size changes (after refetch, etc.)
-//   useEffect(() => {
-//     setPage(1);
-//   }, [tickets.length]);
-
-//   const downloadTicketPDF = (ticketToken) => {
-//     const el = document.getElementById(ticketToken);
-//     if (!el) return;
-//     const isDark = document.documentElement.classList.contains("dark");
-//     html2canvas(el, {
-//       scale: 2,
-//       useCORS: true,
-//       backgroundColor: isDark ? "#0a0f1c" : "#fafafc",
-//       ignoreElements: (e) => e.classList.contains("download-pdf-button"),
-//     }).then((canvas) => {
-//       const imgData = canvas.toDataURL("image/png");
-//       const doc = new jsPDF({ unit: "mm", format: "a4" });
-//       const imgWidth = 180;
-//       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-//       doc.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-//       doc.save(`${ticketToken}.pdf`);
-//     });
-//   };
-
-//   // ---- pagination derived values ----
-//   const totalPages = Math.max(1, Math.ceil(tickets.length / PAGE_SIZE));
-//   const currentPage = Math.min(page, totalPages); // clamp if list shrinks
-//   const pageStart = (currentPage - 1) * PAGE_SIZE;
-//   const pageTickets = tickets.slice(pageStart, pageStart + PAGE_SIZE);
-
-//   // build the list of pages to show: 1 … n-1 n n+1 … last
-//   const buildPageList = () => {
-//     if (totalPages <= 5)
-//       return Array.from({ length: totalPages }, (_, i) => i + 1);
-//     const pages = [];
-//     const add = (p) => pages.push(p);
-//     add(1);
-//     if (currentPage > 3) pages.push("…");
-//     for (
-//       let p = Math.max(2, currentPage - 1);
-//       p <= Math.min(totalPages - 1, currentPage + 1);
-//       p++
-//     ) {
-//       add(p);
-//     }
-//     if (currentPage < totalPages - 2) pages.push("…");
-//     add(totalPages);
-//     return pages;
-//   };
-
-//   return (
-//     <div>
-//       <header className="mb-6">
-//         <h1 className="text-2xl font-bold md:text-3xl">My tickets</h1>
-//         <p className="mt-1 text-sm text-muted">
-//           All your booked journeys, most recent first.
-//         </p>
-//       </header>
-
-//       {loading && (
-//         <div className="space-y-4">
-//           {[0, 1, 2].map((i) => (
-//             <SkeletonCard key={i} />
-//           ))}
-//         </div>
-//       )}
-
-//       {!loading && <Alert type="error">{error}</Alert>}
-
-//       {!loading && !error && tickets.length === 0 && (
-//         <Card className="text-center text-muted">
-//           <TicketIcon className="mx-auto mb-3 h-10 w-10 opacity-50" />
-//           <p className="font-medium">No tickets yet</p>
-//           <p className="mt-1 text-sm">
-//             Book your first journey to see it here.
-//           </p>
-//         </Card>
-//       )}
-
-//       <div className="space-y-4">
-//         {pageTickets.map((ticket, i) => (
-//           <motion.div
-//             key={ticket.ticketToken}
-//             initial={{ opacity: 0, y: 12 }}
-//             animate={{ opacity: 1, y: 0 }}
-//             transition={{ delay: i * 0.05 }}
-//           >
-//             <Card id={ticket.ticketToken} hover>
-//               <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-//                 <div className="flex-1 space-y-1.5">
-//                   <div className="flex flex-wrap items-center gap-2">
-//                     <h2 className="text-lg font-semibold">
-//                       {ticket.source} <span className="text-muted">→</span>{" "}
-//                       {ticket.destination}
-//                     </h2>
-//                     <StatusBadge status={ticket.status} />
-//                   </div>
-//                   {ticket.via?.length > 0 && (
-//                     <p className="text-sm text-muted">
-//                       Via: {ticket.via.join(", ")}
-//                     </p>
-//                   )}
-//                   <p className="text-sm text-muted">Price: ₹{ticket.price}</p>
-//                   <p className="text-sm text-muted break-all">
-//                     Token:{" "}
-//                     <span className="font-mono text-brand">
-//                       {ticket.ticketToken}
-//                     </span>
-//                   </p>
-//                   <p className="text-xs text-muted">
-//                     Issued {new Date(ticket.issuedAt).toLocaleString()} ·
-//                     Expires {new Date(ticket.expiredAt).toLocaleString()}
-//                   </p>
-//                 </div>
-
-//                 <div className="flex flex-row items-center gap-4 sm:flex-col">
-//                   <div className="flex h-28 w-28 items-center justify-center rounded-xl bg-white p-2 shadow-soft">
-//                     <ReactQrcode
-//                       className="h-full w-full"
-//                       value={JSON.stringify({
-//                         ticketToken: ticket.ticketToken,
-//                       })}
-//                     />
-//                   </div>
-//                   <Button
-//                     variant="secondary"
-//                     className="download-pdf-button"
-//                     onClick={() => downloadTicketPDF(ticket.ticketToken)}
-//                   >
-//                     Download PDF
-//                   </Button>
-//                 </div>
-//               </div>
-//             </Card>
-//           </motion.div>
-//         ))}
-//       </div>
-
-//       {/* ---- Pagination ---- */}
-//       {!loading && !error && tickets.length > PAGE_SIZE && (
-//         <div className="mt-6 flex flex-col items-center justify-between gap-3 sm:flex-row">
-//           <p className="text-xs text-muted">
-//             Showing{" "}
-//             <span className="font-medium text-text">
-//               {pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, tickets.length)}
-//             </span>{" "}
-//             of <span className="font-medium text-text">{tickets.length}</span>{" "}
-//             tickets
-//           </p>
-
-//           <div className="flex items-center gap-1.5">
-//             <button
-//               onClick={() => setPage((p) => Math.max(1, p - 1))}
-//               disabled={currentPage === 1}
-//               aria-label="Previous page"
-//               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border
-//                 bg-surface transition hover:bg-surface-2 disabled:opacity-40 disabled:cursor-not-allowed"
-//             >
-//               <ChevronLeft size={16} />
-//             </button>
-
-//             {buildPageList().map((item, idx) =>
-//               item === "…" ? (
-//                 <span key={`gap-${idx}`} className="px-1 text-sm text-muted">
-//                   …
-//                 </span>
-//               ) : (
-//                 <button
-//                   key={item}
-//                   onClick={() => setPage(item)}
-//                   aria-current={item === currentPage ? "page" : undefined}
-//                   className={`h-9 min-w-[36px] rounded-lg px-2 text-sm font-medium transition ${
-//                     item === currentPage
-//                       ? "bg-brand text-brand-fg shadow-soft"
-//                       : "border border-border bg-surface text-muted hover:bg-surface-2"
-//                   }`}
-//                 >
-//                   {item}
-//                 </button>
-//               ),
-//             )}
-
-//             <button
-//               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-//               disabled={currentPage === totalPages}
-//               aria-label="Next page"
-//               className="flex h-9 w-9 items-center justify-center rounded-lg border border-border
-//                 bg-surface transition hover:bg-surface-2 disabled:opacity-40 disabled:cursor-not-allowed"
-//             >
-//               <ChevronRight size={16} />
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default MyTickets;
-
 import React, { useEffect, useState } from "react";
 import ReactQrcode from "react-qr-code";
 import { jsPDF } from "jspdf";
@@ -438,26 +201,42 @@ const generateTicketPDF = (ticket) => {
   // details column
   const detailX = qrX + qrSize + 12;
   const detailW = cardX + cardW - 14 - detailX;
-  let dy = bottomY + 5;
+
+  // Start slightly higher so all details remain inside the card
+  let dy = bottomY + 2;
 
   const row = (label, value, opts = {}) => {
+    // Label
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setTextColor(...hexToRgb(MUTED));
     doc.text(label.toUpperCase(), detailX, dy);
 
+    // Value
     doc.setFont(opts.mono ? "courier" : "helvetica", "bold");
-    doc.setFontSize(opts.size || 11);
+    doc.setFontSize(opts.size || 9);
     doc.setTextColor(...hexToRgb(opts.color || TEXT));
+
     const lines = doc.splitTextToSize(String(value), detailW);
-    doc.text(lines, detailX, dy + 5);
-    dy += 5 + lines.length * (opts.size ? opts.size * 0.55 : 5.5) + 2;
+
+    doc.text(lines, detailX, dy + 4);
+
+    // Compact spacing
+    dy += 8 + Math.max(0, lines.length - 1) * 3.5;
   };
 
   row("Price", `INR ${ticket.price}`);
-  if (ticket.via?.length) row("Via", ticket.via.join(" → "), { size: 9 });
+
+  if (ticket.via?.length) {
+    row("Via", ticket.via.join(" → "), {
+      size: 8,
+    });
+  }
+
   row("Issued", new Date(ticket.issuedAt).toLocaleString());
+
   row("Expires", new Date(ticket.expiredAt).toLocaleString(), {
+    size: 9,
     color: "#dc2626",
   });
 
